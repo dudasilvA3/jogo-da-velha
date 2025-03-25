@@ -30,18 +30,27 @@ function jogar(posicao) {
         }
         sessionStorage.setItem('placar', JSON.stringify(placar)); // Atualiza o placar no sessionStorage
         atualizarPlacar(); // Atualiza o placar na interface
-        desabilitarBotoes(); // Desabilita os botões
         
-        // Exibe a caixa de diálogo perguntando se o jogador quer jogar novamente
-        if (window.confirm('O jogo terminou! Quer jogar novamente?')) {
-            reiniciarJogo(); // Reinicia a partida sem alterar o placar
-        }
+        // Aguarda 2 segundos antes de desabilitar os botões e perguntar se deseja jogar novamente
+        setTimeout(() => {
+            desabilitarBotoes(); // Desabilita os botões
+            
+            // Identificar o vencedor e mostrar na mensagem de confirmação
+            let vencedor = resultado === 'empate' ? 'Empate' : (resultado === 'X' ? 'Jogador 1 (X)' : 'Jogador 2 (O)');
+            
+            // Exibe a caixa de diálogo perguntando se o jogador quer jogar novamente, mostrando o vencedor
+            if (window.confirm(`O jogo terminou! ${vencedor} ganhou. Quer jogar novamente?`)) {
+                reiniciarJogo(); // Reinicia a partida sem alterar o placar
+            }
+        }, 2000); // Espera 2 segundos antes de mostrar a mensagem de reinício
+
         return;
     }
 
     // Alterna entre os jogadores
     vezJogador = vezJogador === 'X' ? 'O' : 'X';
 }
+
 function verificarVitoria() {
     const combinacoes = [
         [0, 1, 2],
